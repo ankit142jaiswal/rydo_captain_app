@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../services/driver_service.dart';
-
-const _green = Color(0xFF4CAF50);
+import '../utils/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -64,9 +63,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                   child: TabBar(
                     controller: _tabController,
                     isScrollable: true,
-                    labelColor: _green,
+                    labelColor: AppColors.dark,
                     unselectedLabelColor: Colors.grey,
-                    indicatorColor: _green,
+                    indicatorColor: AppColors.dark,
                     tabs: const [
                       Tab(icon: Icon(Icons.person), text: 'Personal'),
                       Tab(icon: Icon(Icons.directions_car), text: 'Vehicle'),
@@ -104,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             children: [
               CircleAvatar(
                 radius: 44,
-                backgroundColor: _green,
+                backgroundColor: AppColors.dark,
                 child: Text(
                   (d['name']?.toString() ?? 'D').substring(0, 1).toUpperCase(),
                   style: const TextStyle(fontSize: 34, color: Colors.white, fontWeight: FontWeight.bold),
@@ -115,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 right: 0,
                 child: Container(
                   padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(color: _green, shape: BoxShape.circle),
+                  decoration: const BoxDecoration(color: AppColors.dark, shape: BoxShape.circle),
                   child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
                 ),
               ),
@@ -134,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                     if (d['isVerified'] == true) ...[
                       const SizedBox(width: 6),
-                      const Icon(Icons.verified, color: _green, size: 20),
+                      const Icon(Icons.verified, color: AppColors.dark, size: 20),
                     ],
                   ],
                 ),
@@ -153,11 +152,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                    color: _green.withOpacity(0.1),
+                    color: AppColors.dark.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(details['isOnline'] == true ? 'Online' : 'Active',
-                      style: const TextStyle(color: _green, fontSize: 12, fontWeight: FontWeight.w600)),
+                      style: const TextStyle(color: AppColors.dark, fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
@@ -212,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   const Text('Performance Stats',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
-                  _statBar('Overall Rating', rating / 5, '${rating.toStringAsFixed(1)}/5.0', _green),
+                  _statBar('Overall Rating', rating / 5, '${rating.toStringAsFixed(1)}/5.0', AppColors.dark),
                   _statBar('Completion Rate', 0.96, '96%', Colors.blue),
                   _statBar('Acceptance Rate', 0.89, '89%', Colors.orange),
                   const SizedBox(height: 8),
@@ -276,12 +275,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                 final uploaded = docs[doc['key']] != null && docs[doc['key']].toString().isNotEmpty;
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: Icon(doc['icon'] as IconData, color: _green),
+                  leading: Icon(doc['icon'] as IconData, color: AppColors.dark),
                   title: Text(doc['type'] as String),
                   trailing: Chip(
                     label: Text(uploaded ? 'Verified' : 'Pending',
                         style: const TextStyle(color: Colors.white, fontSize: 11)),
-                    backgroundColor: uploaded ? _green : Colors.orange,
+                    backgroundColor: uploaded ? AppColors.dark : Colors.orange,
                     padding: EdgeInsets.zero,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
@@ -408,7 +407,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       contentPadding: EdgeInsets.zero,
       title: Text(label),
       value: _settings[key] ?? false,
-      activeColor: _green,
+      activeColor: AppColors.dark,
       onChanged: (v) => setState(() => _settings[key] = v),
     );
   }

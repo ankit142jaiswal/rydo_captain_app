@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../utils/app_colors.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -44,7 +45,9 @@ class _SignupScreenState extends State<SignupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(authService.error ?? 'Registration failed'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
     }
@@ -55,7 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Become a Captain'),
-        backgroundColor: const Color(0xFF4CAF50),
+        // Uses AppColors.dark from theme — no override needed
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -65,15 +68,28 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 8),
+                // Logo / icon
                 Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4CAF50),
+                    gradient: AppColors.primaryGradient,
                     borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.3),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
                   ),
-                  child: const Icon(Icons.local_taxi,
-                      size: 40, color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Image.asset(
+                      'assets/images/rydo_captain_logo.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -83,11 +99,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Sign up to start driving and earning',
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: TextStyle(color: AppColors.onSurfaceVariant),
                 ),
                 const SizedBox(height: 28),
                 TextFormField(
                   controller: _nameController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Full Name',
                     prefixIcon: Icon(Icons.person_outline),
@@ -100,6 +117,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     prefixIcon: Icon(Icons.email_outlined),
@@ -111,6 +129,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 TextFormField(
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
                   maxLength: 10,
                   decoration: const InputDecoration(
                     labelText: 'Phone (10 digits)',
@@ -125,13 +144,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) => _handleSignup(),
                   decoration: InputDecoration(
                     labelText: 'Password',
                     prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(_obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined),
                       onPressed: () =>
                           setState(() => _obscurePassword = !_obscurePassword),
                     ),
@@ -143,21 +164,57 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 28),
                 Consumer<AuthService>(
                   builder: (context, authService, child) {
-                    return SizedBox(
-                      width: double.infinity,
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
                       height: 52,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        gradient: authService.isLoading
+                            ? null
+                            : AppColors.primaryGradient,
+                        color: authService.isLoading
+                            ? AppColors.outlineVariant
+                            : null,
+                        boxShadow: authService.isLoading
+                            ? []
+                            : [
+                                BoxShadow(
+                                  color: AppColors.primary.withOpacity(0.35),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                      ),
                       child: ElevatedButton(
                         onPressed: authService.isLoading ? null : _handleSignup,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          minimumSize: const Size(double.infinity, 52),
+                          padding: EdgeInsets.zero,
+                        ),
                         child: authService.isLoading
                             ? const SizedBox(
                                 width: 22,
                                 height: 22,
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
+                                  color: AppColors.dark,
                                   strokeWidth: 2,
+                                  strokeCap: StrokeCap.round,
                                 ),
                               )
-                            : const Text('Sign Up'),
+                            : const Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.onPrimary,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
                       ),
                     );
                   },
@@ -166,7 +223,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 TextButton(
                   onPressed: () =>
                       Navigator.pushReplacementNamed(context, '/login'),
-                  child: const Text('Already have an account? Sign In'),
+                  child: const Text(
+                    'Already have an account? Sign In',
+                    style: TextStyle(color: AppColors.dark),
+                  ),
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/driver_service.dart';
+import '../utils/app_colors.dart';
 
 class RideRequestsScreen extends StatefulWidget {
   const RideRequestsScreen({super.key});
@@ -20,18 +21,12 @@ class _RideRequestsScreenState extends State<RideRequestsScreen> {
 
   Color _statusColor(String status) {
     switch (status) {
-      case 'requested':
-        return Colors.orange;
-      case 'accepted':
-        return Colors.blue;
-      case 'started':
-        return Colors.purple;
-      case 'completed':
-        return Colors.green;
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return Colors.grey;
+      case 'requested': return AppColors.requested;
+      case 'accepted':  return AppColors.accepted;
+      case 'started':   return AppColors.arrived;
+      case 'completed': return AppColors.completed;
+      case 'cancelled': return AppColors.cancelled;
+      default: return AppColors.onSurfaceVariant;
     }
   }
 
@@ -51,9 +46,10 @@ class _RideRequestsScreenState extends State<RideRequestsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.directions_car_outlined, size: 64, color: Colors.grey),
+                  Icon(Icons.directions_car_outlined, size: 64, color: AppColors.outlineVariant),
                   SizedBox(height: 12),
-                  Text('No ride requests yet', style: TextStyle(color: Colors.grey)),
+                  Text('No ride requests yet',
+                      style: TextStyle(color: AppColors.onSurfaceVariant)),
                 ],
               ),
             );
@@ -100,8 +96,7 @@ class _RideRequestsScreenState extends State<RideRequestsScreen> {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            const Icon(Icons.my_location,
-                                size: 16, color: Colors.green),
+                            const Icon(Icons.my_location, size: 16, color: AppColors.success),
                             const SizedBox(width: 6),
                             Expanded(child: Text(pickup)),
                           ],
@@ -109,8 +104,7 @@ class _RideRequestsScreenState extends State<RideRequestsScreen> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.location_on,
-                                size: 16, color: Colors.red),
+                            const Icon(Icons.location_on, size: 16, color: AppColors.cancelled),
                             const SizedBox(width: 6),
                             Expanded(child: Text(destination)),
                           ],
@@ -119,9 +113,13 @@ class _RideRequestsScreenState extends State<RideRequestsScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('₹$fare',
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text(
+                              '₹$fare',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             _buildAction(context, driverService, rideId, status),
                           ],
                         ),
@@ -151,7 +149,10 @@ class _RideRequestsScreenState extends State<RideRequestsScreen> {
       );
     } else if (status == 'started') {
       return ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.success,
+          foregroundColor: Colors.white,
+        ),
         onPressed: () => service.updateRideStatus(rideId, 'completed'),
         child: const Text('Complete'),
       );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/driver_service.dart';
+import '../utils/app_colors.dart';
 import '../widgets/earnings_card.dart';
 
 class EarningsScreen extends StatefulWidget {
@@ -40,16 +41,20 @@ class _EarningsScreenState extends State<EarningsScreen> {
                 ),
                 const SizedBox(height: 12),
                 if (driverService.isLoading)
-                  const Center(child: Padding(
-                    padding: EdgeInsets.all(24),
-                    child: CircularProgressIndicator(),
-                  ))
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
                 else if (driverService.earnings.isEmpty)
                   const Padding(
                     padding: EdgeInsets.all(24),
                     child: Center(
-                      child: Text('No earnings yet',
-                          style: TextStyle(color: Colors.grey)),
+                      child: Text(
+                        'No earnings yet',
+                        style: TextStyle(color: AppColors.onSurfaceVariant),
+                      ),
                     ),
                   )
                 else
@@ -57,10 +62,12 @@ class _EarningsScreenState extends State<EarningsScreen> {
                     return Card(
                       margin: const EdgeInsets.only(bottom: 10),
                       child: ListTile(
-                        leading: const CircleAvatar(
-                          backgroundColor: Color(0xFFE8F5E9),
-                          child: Icon(Icons.directions_car,
-                              color: Color(0xFF4CAF50)),
+                        leading: CircleAvatar(
+                          backgroundColor: AppColors.primary.withOpacity(0.15),
+                          child: const Icon(
+                            Icons.directions_car,
+                            color: AppColors.dark,
+                          ),
                         ),
                         title: Text(e['customer']?.toString() ?? 'Customer'),
                         subtitle: Text(
@@ -70,7 +77,7 @@ class _EarningsScreenState extends State<EarningsScreen> {
                           '₹${e['earning'] ?? 0}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF4CAF50),
+                            color: AppColors.dark,
                             fontSize: 16,
                           ),
                         ),

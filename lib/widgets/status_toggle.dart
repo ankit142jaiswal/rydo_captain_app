@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/driver_service.dart';
+import '../utils/app_colors.dart';
 
 /// Online/offline toggle shown on the dashboard.
 class StatusToggle extends StatelessWidget {
@@ -19,7 +20,7 @@ class StatusToggle extends StatelessWidget {
                 Icon(
                   Icons.circle,
                   size: 14,
-                  color: isOnline ? Colors.green : Colors.grey,
+                  color: isOnline ? AppColors.online : AppColors.offline,
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -27,15 +28,15 @@ class StatusToggle extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: isOnline ? Colors.green[800] : Colors.grey[700],
+                    color: isOnline ? AppColors.dark : AppColors.onSurfaceVariant,
                   ),
                 ),
               ],
             ),
             Switch(
               value: isOnline,
-              activeColor: Colors.green,
               onChanged: (_) => driverService.toggleOnlineStatus(),
+              // Uses theme SwitchThemeData — primary yellow track when active
             ),
           ],
         );

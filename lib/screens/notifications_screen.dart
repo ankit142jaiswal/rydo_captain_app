@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/notification_service.dart';
+import '../utils/app_colors.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -52,9 +53,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.notifications_off_outlined, size: 64, color: Colors.grey),
+                  Icon(Icons.notifications_off_outlined, size: 64, color: AppColors.outlineVariant),
                   SizedBox(height: 12),
-                  Text('No notifications', style: TextStyle(color: Colors.grey)),
+                  Text('No notifications', style: TextStyle(color: AppColors.onSurfaceVariant)),
                 ],
               ),
             );
@@ -73,24 +74,31 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   background: Container(
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 20),
-                    color: Colors.red,
+                    color: AppColors.error,
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   onDismissed: (_) => service.deleteNotification(n['_id']),
                   child: Card(
-                    color: isRead ? Colors.white : const Color(0xFFE8F5E9),
+                    color: isRead ? AppColors.surface : AppColors.surfaceVariant,
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: const Color(0xFF4CAF50).withOpacity(0.1),
-                        child: Icon(_typeIcon(n['type'] ?? ''), color: const Color(0xFF4CAF50)),
+                        backgroundColor: AppColors.primary.withOpacity(0.15),
+                        child: Icon(
+                          _typeIcon(n['type'] ?? ''),
+                          color: AppColors.dark,
+                        ),
                       ),
-                      title: Text(n['title'] ?? '',
-                          style: TextStyle(fontWeight: isRead ? FontWeight.normal : FontWeight.bold)),
+                      title: Text(
+                        n['title'] ?? '',
+                        style: TextStyle(
+                          fontWeight: isRead ? FontWeight.normal : FontWeight.bold,
+                        ),
+                      ),
                       subtitle: Text(n['message'] ?? ''),
                       trailing: isRead
                           ? null
-                          : const Icon(Icons.circle, size: 10, color: Color(0xFF4CAF50)),
+                          : const Icon(Icons.circle, size: 10, color: AppColors.primary),
                       onTap: isRead ? null : () => service.markAsRead(n['_id']),
                     ),
                   ),

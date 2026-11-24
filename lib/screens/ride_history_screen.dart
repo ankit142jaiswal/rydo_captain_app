@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/driver_service.dart';
+import '../utils/app_colors.dart';
 
 class RideHistoryScreen extends StatefulWidget {
   const RideHistoryScreen({super.key});
@@ -20,7 +21,7 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
 
   Color _statusColor(String s) {
     switch (s) {
-      case 'completed': return Colors.green;
+      case 'completed': return AppColors.completed;
       case 'cancelled': return Colors.red;
       case 'started': return Colors.purple;
       case 'accepted': return Colors.blue;
@@ -85,7 +86,7 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
                         ),
                         const SizedBox(height: 8),
                         Row(children: [
-                          const Icon(Icons.my_location, size: 15, color: Colors.green),
+                          const Icon(Icons.my_location, size: 15, color: AppColors.success),
                           const SizedBox(width: 6),
                           Expanded(child: Text(ride['pickup']?['address'] ?? 'N/A')),
                         ]),

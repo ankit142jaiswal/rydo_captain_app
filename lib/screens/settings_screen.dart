@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/notification_service.dart';
 import '../services/auth_service.dart';
+import '../utils/app_colors.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -37,7 +38,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(ok ? 'Settings saved' : 'Failed to save settings'),
-      backgroundColor: ok ? Colors.green : Colors.red,
+      backgroundColor: ok ? AppColors.success : AppColors.error,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ));
   }
 
@@ -50,8 +53,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                const Text('Notification Preferences',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text(
+                  'Notification Preferences',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 12),
                 _toggle('Ride Updates', 'rideUpdates', Icons.directions_car),
                 _toggle('Promotions & Offers', 'promotions', Icons.local_offer),
@@ -64,7 +69,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: ElevatedButton(
                     onPressed: _saving ? null : _save,
                     child: _saving
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: AppColors.onPrimary,
+                              strokeWidth: 2,
+                            ),
+                          )
                         : const Text('Save Settings'),
                   ),
                 ),
@@ -74,13 +86,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SizedBox(
                   height: 52,
                   child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.error,
+                      foregroundColor: Colors.white,
+                    ),
                     icon: const Icon(Icons.logout),
                     label: const Text('Logout'),
                     onPressed: () async {
                       await Provider.of<AuthService>(context, listen: false).logout();
                       if (context.mounted) {
-                        Navigator.pushNamedAndRemoveUntil(context, '/login', (r) => false);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (r) => false);
                       }
                     },
                   ),
@@ -94,9 +110,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: SwitchListTile(
-        secondary: Icon(icon, color: const Color(0xFF4CAF50)),
+        secondary: Icon(icon, color: AppColors.dark),
         title: Text(label),
-        activeColor: const Color(0xFF4CAF50),
+        // Switch color comes from theme SwitchThemeData (yellow)
         value: _local[key] ?? true,
         onChanged: (v) => setState(() => _local[key] = v),
       ),
