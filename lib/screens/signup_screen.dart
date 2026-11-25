@@ -85,10 +85,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Image.asset(
-                      'assets/images/rydo_captain_logo.png',
-                      fit: BoxFit.contain,
-                    ),
+                    child: ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.asset('assets/images/rydo_captain_icon.jpg', fit: BoxFit.cover)),
                   ),
                 ),
                 const SizedBox(height: 16),
