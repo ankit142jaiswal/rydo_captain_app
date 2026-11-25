@@ -318,10 +318,28 @@ class _HomeTabState extends State<_HomeTab> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Rydo Captain'),
       backgroundColor: AppColors.dark,
       foregroundColor: Colors.white,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      automaticallyImplyLeading: false,
+      // Logo IS the menu trigger — no text title
+      leading: Builder(
+        builder: (ctx) => InkWell(
+          onTap: () => Scaffold.of(ctx).openDrawer(),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/images/rydo_captain_icon.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+      ),
+      title: null,
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_outlined),
